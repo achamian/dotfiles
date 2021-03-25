@@ -8,6 +8,7 @@ tap "microsoft/mssql-release"
 # Brew installs
 brew "ack"
 brew "aspell"
+brew "direnv"
 brew "fzf"
 brew "git"
 brew "go"
