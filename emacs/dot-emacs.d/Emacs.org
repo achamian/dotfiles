@@ -192,6 +192,131 @@ Use =ace-window= for window management
   (global-set-key (kbd "M-o") 'ace-window)
 #+end_src
 
+** Better Modeline
+
+=doom-modeline= is a very attractive and rich (yet still minimal) mode line configuration for Emacs.  The default configuration is quite good but you can check out the [[https://github.com/seagle0128/doom-modeline#customize][configuration options]] for more things you can enable or disable.
+
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1)
+    :custom ((doom-modeline-height 15)))
+#+end_src
+
+** Text
+*** Font Configuration
+
+#+begin_src emacs-lisp
+  (setq np/default-fixed-font "Fira Code Retina")
+  (setq np/default-fixed-font-size 140)
+  (setq np/current-fixed-font-size np/default-fixed-font-size)
+  (set-face-attribute 'default nil
+                      :family np/default-fixed-font
+                      :height np/current-fixed-font-size)
+  (set-face-attribute 'fixed-pitch nil
+                      :family np/default-fixed-font
+                      :height np/current-fixed-font-size)
+
+  (setq np/default-variable-font "Cantarell")
+  (setq np/default-variable-font-size 140)
+  (setq np/current-variable-font-size np/default-variable-font-size)
+  (set-face-attribute 'variable-pitch nil
+                      :family np/default-variable-font
+                      :height np/current-variable-font-size)
+
+  (setq np/font-change-increment 1.1)
+
+  (defun np/set-font-size ()
+    "Change default, fixed-pitch, and variable-pitch font sizes to match respective variables."
+    (set-face-attribute 'default nil
+                        :height np/current-fixed-font-size)
+    (set-face-attribute 'fixed-pitch nil
+                        :height np/current-fixed-font-size)
+    (set-face-attribute 'variable-pitch nil
+                        :height np/current-variable-font-size))
+
+  (defun np/reset-font-size ()
+    "Revert font sizes back to defaults."
+    (interactive)
+    (setq np/current-fixed-font-size np/default-fixed-font-size)
+    (setq np/current-variable-font-size np/default-variable-font-size)
+    (np/set-font-size))
+
+  (defun np/increase-font-size ()
+    "Increase current font sizes by a factor of `np/font-change-increment'."
+    (interactive)
+    (setq np/current-fixed-font-size
+          (ceiling (* np/current-fixed-font-size np/font-change-increment)))
+    (setq np/current-variable-font-size
+          (ceiling (* np/current-variable-font-size np/font-change-increment)))
+    (np/set-font-size))
+
+  (defun np/decrease-font-size ()
+    "Decrease current font sizes by a factor of `np/font-change-increment', down to a minimum size of 1."
+    (interactive)
+    (setq np/current-fixed-font-size
+          (max 1
+               (floor (/ np/current-fixed-font-size np/font-change-increment))))
+    (setq np/current-variable-font-size
+          (max 1
+               (floor (/ np/current-variable-font-size np/font-change-increment))))
+    (np/set-font-size))
+
+  (define-key global-map (kbd "H-)") 'np/reset-font-size)
+  (define-key global-map (kbd "H-+") 'np/increase-font-size)
+  (define-key global-map (kbd "H--") 'np/decrease-font-size)
+
+  (np/reset-font-size)
+#+end_src
+
+*** All Icons
+
+*NOTE:* The first time you load your configuration on a new machine, you'll need to run =M-x all-the-icons-install-fonts= so that mode line icons display correctly.
+
+#+begin_src emacs-lisp
+  (use-package all-the-icons)
+#+end_src
+
+*** Highlight Current Line
+
+#+begin_src emacs-lisp
+  (global-hl-line-mode)
+#+end_src
+
+*** Highlight Uncommitted Changes
+
+#+begin_src emacs-lisp
+  (use-package diff-hl
+      :config
+      (add-hook 'prog-mode-hook 'turn-on-diff-hl-mode)
+      (add-hook 'vc-dir-mode-hook 'turn-on-diff-hl-mode))
+#+end_src
+
+*** Change Cursor
+
+#+begin_src emacs-lisp
+  (set-cursor-color "wheat")
+#+end_src
+
+** Colour Theme
+
+[[https://github.com/hlissner/emacs-doom-themes][doom-themes]] is a great set of themes with a lot of variety and support for many different Emacs modes.  Taking a look at the [[https://github.com/hlissner/emacs-doom-themes/tree/screenshots][screenshots]] might help you decide which one you like best.  You can also run =M-x counsel-load-theme= to choose between them easily.
+
+#+begin_src emacs-lisp
+  (use-package doom-themes
+    :init (load-theme 'doom-palenight t))
+#+end_src
+
+** Transperency
+
+#+begin_src emacs-lisp
+  (defun np/transparency (value)
+      "Sets the transparency of the frame window. 0=transparent/100=opaque."
+      (interactive "nTransparency Value 0 - 100 opaque:")
+      (set-frame-parameter (selected-frame) 'alpha value))
+
+  (np/transparency 95)
+#+end_src
+
 * =org-mode=
 
 Include =org-tempo= for easy templating using =<s=.
