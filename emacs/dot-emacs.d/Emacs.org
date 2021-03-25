@@ -194,10 +194,19 @@ When point goes outside the window, Emacs usually recenters the buffer point. Th
 #+end_src
 
 * Project Management
+** Helm
+
+#+begin_src emacs-lisp
+  (use-package helm)
+#+end_src
+
 ** Install =rg= to search
 
 #+begin_src emacs-lisp
   (use-package rg)
+  (use-package helm-rg
+    :config (setq helm-rg-default-directory 'git-root)
+    :bind (("H-F" . helm-projectile-rg)))
 #+end_src
 
 ** Use =company= for completions
@@ -279,6 +288,40 @@ If XREF returns more than one result show it in =ivy=
      ("H-t" . projectile-find-file)))
 #+end_src
 
+* Development
+** Default configuration for development environment
+
+Remove trailing whitespace before saving
+
+#+begin_src emacs-lisp
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+end_src
+
+New line at the end of the file
+
+#+begin_src emacs-lisp
+  (setq require-final-newline t)
+#+end_src
+
+Automatically reload files when they change on disk
+
+#+begin_src emacs-lisp
+  (global-auto-revert-mode 1)
+  (setq auto-revert-verbose nil)
+#+end_src
+
+Delete selected text when overwriting
+
+#+begin_src emacs-lisp
+  (delete-selection-mode 1)
+#+end_src
+
+Indentation
+
+#+begin_src emacs-lisp
+  (setq tab-width 2)
+  (use-package indent-tools)
+#+end_src
 
 * UI Prefences
 ** Window
@@ -568,3 +611,5 @@ Don't show deadline entries under today's entry
 ** [[https://github.com/abo-abo/avy][avy]]
 ** ivy-rich
 ** hi-lock
+** [[https://github.com/noctuid/general.el][general.el]]
+** Is helm required?
