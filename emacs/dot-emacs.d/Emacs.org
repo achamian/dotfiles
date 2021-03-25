@@ -195,6 +195,28 @@ When point goes outside the window, Emacs usually recenters the buffer point. Th
             (t . ivy--regex-fuzzy))))
 #+end_src
 
+** Dired Mode
+
+#+begin_src emacs-lisp
+  (use-package all-the-icons-dired
+    :ensure t
+    :init (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+
+  (global-set-key (kbd "H-<f1>")
+    (lambda ()
+      (interactive)
+      (dired "~/")))
+#+end_src
+
+** Functions
+
+#+begin_src emacs-lisp
+  (defun np/add-auto-mode (mode &rest patterns)
+    "Add entries to `auto-mode-alist' to use `MODE' for all given file `PATTERNS'."
+    (dolist (pattern patterns)
+      (add-to-list 'auto-mode-alist (cons pattern mode))))
+#+end_src
+
 * UI Prefences
 ** Window
 
@@ -336,12 +358,6 @@ Use =ace-window= for window management
       (add-hook 'vc-dir-mode-hook 'turn-on-diff-hl-mode))
 #+end_src
 
-** Change Cursor
-
-#+begin_src emacs-lisp
-  (set-cursor-color "wheat")
-#+end_src
-
 ** Colour Theme
 
 [[https://github.com/hlissner/emacs-doom-themes][doom-themes]] is a great set of themes with a lot of variety and support for many different Emacs modes.  Taking a look at the [[https://github.com/hlissner/emacs-doom-themes/tree/screenshots][screenshots]] might help you decide which one you like best.  You can also run =M-x counsel-load-theme= to choose between them easily.
@@ -349,6 +365,12 @@ Use =ace-window= for window management
 #+begin_src emacs-lisp
   (use-package doom-themes
     :init (load-theme 'doom-palenight t))
+#+end_src
+
+** Change Cursor
+
+#+begin_src emacs-lisp
+  (set-cursor-color "wheat")
 #+end_src
 
 ** Transperency
@@ -508,6 +530,21 @@ Indentation
   (use-package indent-tools)
 #+end_src
 
+Treat terms in names as separate for easy navigation
+
+#+begin_src emacs-lisp
+  (use-package subword
+    :config (global-subword-mode 1))
+#+end_src
+
+** LSP
+
+Use =eglot= as LSP client
+
+#+begin_src emacs-lisp
+  (use-package eglot)
+#+end_src
+
 ** Snippets
 
 Use yasnippets and doom
@@ -538,6 +575,118 @@ Compile CSS file on save
     (setq scss-compile-at-save nil))
 #+end_src
 
+** Lisps
+*** All Lisps
+
+#+begin_src emacs-lisp
+  (setq lispy-mode-hooks
+        '(clojure-mode-hook
+          emacs-lisp-mode-hook
+          lisp-mode-hook))
+#+end_src
+
+Use =paredit= to play with parentheses and =rainbow-delimiters= for colouring them.
+
+#+begin_src emacs-lisp
+  (use-package paredit)
+  (use-package rainbow-delimiters)
+  (dolist (hook lispy-mode-hooks)
+    (add-hook hook (lambda ()
+                     (paredit-mode)
+                     (setq show-paren-style 'expression)
+                     (rainbow-delimiters-mode))))
+#+end_src
+
+*** Elisp
+
+Use =eldoc-mode= to display documentation while working on Elisp
+
+#+begin_src emacs-lisp
+  (use-package eldoc
+    :config
+    (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
+#+end_src
+
+** Ruby
+
+I use =rbenv= to manage different ruby versions.
+
+#+begin_src emacs-lisp
+  (use-package rbenv)
+#+end_src
+
+Running tests from within Emacs is part of my flow.
+
+#+begin_src emacs-lisp
+  (use-package rspec-mode
+    :config
+    (add-hook 'compilation-filter-hook 'inf-ruby-auto-enter)
+    (setq compilation-scroll-output nil
+          rspec-command-options "--color --order random"
+          rspec-use-chruby t))
+#+end_src
+
+Ruby method comments are often formatted with Yard.
+
+#+begin_src emacs-lisp
+  (use-package yard-mode
+    :hook ruby-mode)
+#+end_src
+
+Auto insert =end=.
+
+#+begin_src emacs-lisp
+  (use-package ruby-end)
+#+end_src
+
+Install and enable =projectile-rails=.
+
+#+begin_src emacs-lisp
+  (use-package projectile-rails
+    :config
+    (projectile-rails-global-mode))
+#+end_src
+
+Things to do when =ruby-mode= is loaded
+
+#+begin_src emacs-lisp
+  (add-hook 'ruby-mode-hook
+          (lambda ()
+            (setq ruby-insert-encoding-magic-comment nil)
+            (yas-minor-mode)
+            (eglot-ensure)
+            (local-set-key "\r" 'newline-and-indent)))
+#+end_src
+
+Associate various files with =ruby-mode=
+
+#+begin_src emacs-lisp
+  (np/add-auto-mode
+   'ruby-mode
+   "\\Gemfile$"
+   "\\.rake$"
+   "\\.gemspec$"
+   "\\Guardfile$"
+   "\\Rakefile$"
+   "\\Brewfile$"
+   "\\Vagrantfile$"
+   "\\Vagrantfile.local$")
+#+end_src
+
+** Yaml
+
+#+begin_src emacs-lisp
+  (use-package yaml-mode)
+
+  (use-package flymake-yaml
+    :init (add-hook 'yaml-mode-hook 'flymake-yaml-load))
+
+  (np/add-auto-mode 'yaml-mode
+                    "\\.yml$"
+                    "\\.yml.sample$"
+                    "\\.yaml.sample$")
+  (load custom-file t)
+#+end_src
 
 * =org-mode=
 
@@ -714,3 +863,4 @@ Don't show deadline entries under today's entry
 ** hi-lock
 ** [[https://github.com/noctuid/general.el][general.el]]
 ** Is helm required?
+** Doom and spacemacs ruby mode
