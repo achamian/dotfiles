@@ -522,6 +522,23 @@ Use yasnippets and doom
     :after yasnippet)
 #+end_src
 
+** CSS, Sass, and Less
+
+#+begin_src emacs-lisp
+  (use-package css-mode
+    :config
+    (setq css-indent-offset 2))
+#+end_src
+
+Compile CSS file on save
+
+#+begin_src emacs-lisp
+  (use-package scss-mode
+    :config
+    (setq scss-compile-at-save nil))
+#+end_src
+
+
 * =org-mode=
 
 Include =org-tempo= for easy templating using =<s=.
