@@ -106,3 +106,49 @@ Compile installed packages.
   (use-package auto-compile
     :config (auto-compile-on-load-mode))
 #+end_src
+
+* =org-mode=
+
+Include =org-tempo= for easy templating using =<s=.
+
+#+begin_src emacs-lisp
+  (defun np/org-mode-setup ()
+    (org-indent-mode)
+    (variable-pitch-mode 1)
+    (visual-line-mode 1))
+
+  (use-package org
+    :ensure org-plus-contrib
+    :bind (:map org-mode-map ("C-c e" . org-edit-src-code))
+    :hook (org-mode . np/org-mode-setup)
+    :config
+    (require 'org-tempo)
+    (add-hook 'org-mode-hook
+              '(lambda ()
+                 (setq org-file-apps
+                       '(("md" . emacs)
+                         ("org" . emacs))))))
+
+  (add-to-list 'org-structure-template-alist
+             '("el" . "src emacs-lisp"))
+#+end_src
+
+** Display Preferences
+
+Use =org-bullets= to use pretty bullets instead of asterisks
+
+#+begin_src emacs-lisp
+  (use-package org-bullets
+      :hook (org-mode . org-bullets-mode)
+      :custom
+      (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+#+end_src
+
+Misc display preferences
+
+#+begin_src emacs-lisp
+  (setq org-ellipsis " ▾"                     ;; better ellipsis
+        org-src-fontify-natively t		;; syntax highlighting for code blocks
+        org-src-tab-acts-natively t		;; tab behavior in code blocks
+        org-src-window-setup 'current-window)	;; don't open new window while editing code
+#+end_src
