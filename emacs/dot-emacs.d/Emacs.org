@@ -117,7 +117,13 @@ Keep .emacs.d and other directories clean
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 #+end_src
 
-* Utility Functions
+* Utilities
+** Functions
+** Fancy lambdas
+
+#+begin_src emacs-lisp
+  (global-prettify-symbols-mode t)
+#+end_src
 
 * Key Bindings
 ** MacOS
@@ -142,6 +148,48 @@ Keep .emacs.d and other directories clean
 #+begin_src emacs-lisp
   (global-set-key (kbd "H-/") 'comment-region)
   (global-set-key (kbd "H-?") 'uncomment-region)
+#+end_src
+
+* UI Prefences
+** Window
+
+Remove unused features which clutter the UI
+
+#+begin_src emacs-lisp
+  (setq inhibit-startup-message t)
+  (scroll-bar-mode -1)        ; Disable visible scrollbar
+  (set-window-scroll-bars (minibuffer-window) nil nil) ; Disable scrollbar in minibuffers
+  (tool-bar-mode -1)          ; Disable the toolbar
+  (tooltip-mode -1)           ; Disable tooltips
+  (set-fringe-mode 10)        ; Give some breathing room
+  (menu-bar-mode -1)          ; Disable the menu bar
+#+end_src
+
+Column numbers and line numbers
+
+#+begin_src emacs-lisp
+  (column-number-mode)
+  (global-display-line-numbers-mode t)
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook
+    	      term-mode-hook
+    	      shell-mode-hook
+    	      treemacs-mode-hook
+    	      eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+#+end_src
+
+Change the frame title to current project using =projectile=
+
+#+begin_src emacs-lisp
+  (setq frame-title-format '((:eval (projectile-project-name))))
+#+end_src
+
+Use =ace-window= for window management
+
+#+begin_src emacs-lisp
+  (use-package ace-window)
+  (global-set-key (kbd "M-o") 'ace-window)
 #+end_src
 
 * =org-mode=
