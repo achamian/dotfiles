@@ -31,6 +31,8 @@ Change GC thrushold while starting emacs to improve initial load time. GC is set
 ** Sensible defaults
 
 #+begin_src emacs-lisp
+  (setq inhibit-startup-screen t)
+  (setq delete-old-versions -1 )
   (setq coding-system-for-read 'utf-8)
   (setq coding-system-for-write 'utf-8)
   (setq initial-scratch-message "")
@@ -191,136 +193,6 @@ When point goes outside the window, Emacs usually recenters the buffer point. Th
     (setq ivy-re-builders-alist
           '((swiper . ivy--regex-plus)
             (t . ivy--regex-fuzzy))))
-#+end_src
-
-* Project Management
-** Helm
-
-#+begin_src emacs-lisp
-  (use-package helm)
-#+end_src
-
-** Install =rg= to search
-
-#+begin_src emacs-lisp
-  (use-package rg)
-  (use-package helm-rg
-    :config (setq helm-rg-default-directory 'git-root)
-    :bind (("H-F" . helm-projectile-rg)))
-#+end_src
-
-** Use =company= for completions
-
-#+begin_src emacs-lisp
-  (use-package company
-    :config (add-hook 'prog-mode-hook 'company-mode)
-    :bind (:map company-active-map
-                ("<tab>" . company-complete-selection))
-    :custom
-    (company-tooltip-align-annotations t)
-    (company-idle-delay 0)
-    (company-minimum-prefix-length 1))
-
-  (use-package company-box
-      :hook (company-mode . company-box-mode))
-#+end_src
-
-** =dumb-jump=
-
-#+begin_src emacs-lisp
-  (use-package dumb-jump
-    :config
-    (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
-
-  (global-set-key (kbd "M-.") 'xref-find-definitions)
-#+end_src
-
-If XREF returns more than one result show it in =ivy=
-
-#+begin_src emacs-lisp
-  (use-package ivy-xref
-    :init
-    (setq xref-show-definitions-function #'ivy-xref-show-defs))
-#+end_src
-
-** =flycheck=
-
-#+begin_src emacs-lisp
-  (use-package flycheck
-      :defer t
-      :hook (prog-mode . flycheck-mode))
-#+end_src
-
-** =magit=
-
-#+begin_src emacs-lisp
-  (use-package magit
-    :bind ("C-x g" . magit-status)
-    :custom
-    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
-    :config (use-package with-editor)
-    (setq magit-push-always-verify nil
-          git-commit-summary-max-length 50))
-#+end_src
-
-** Neotree
-
-#+begin_src emacs-lisp
-  (use-package neotree
-    :ensure t
-    :bind (("C-c n t" . neotree-toggle)))
-#+end_src
-
-** Projectile
-
-#+begin_src emacs-lisp
-  (use-package projectile
-    :init
-    :delight '(:eval (concat " " (projectile-project-name)))
-    (setq projectile-completion-system 'ivy)
-    :config
-    (projectile-mode)
-    (setq projectile-completion-system 'ivy
-          projectile-switch-project-action 'projectile-dired
-          projectile-require-project-root nil)
-    :bind
-    (("H-p" . projectile-switch-project)
-     ("H-t" . projectile-find-file)))
-#+end_src
-
-* Development
-** Default configuration for development environment
-
-Remove trailing whitespace before saving
-
-#+begin_src emacs-lisp
-  (add-hook 'before-save-hook 'delete-trailing-whitespace)
-#+end_src
-
-New line at the end of the file
-
-#+begin_src emacs-lisp
-  (setq require-final-newline t)
-#+end_src
-
-Automatically reload files when they change on disk
-
-#+begin_src emacs-lisp
-  (global-auto-revert-mode 1)
-  (setq auto-revert-verbose nil)
-#+end_src
-
-Delete selected text when overwriting
-
-#+begin_src emacs-lisp
-  (delete-selection-mode 1)
-#+end_src
-
-Indentation
-
-#+begin_src emacs-lisp
-  (setq tab-width 2)
-  (use-package indent-tools)
 #+end_src
 
 * UI Prefences
@@ -488,6 +360,166 @@ Use =ace-window= for window management
       (set-frame-parameter (selected-frame) 'alpha value))
 
   (np/transparency 95)
+#+end_src
+
+** Dashboard
+
+Use [[https://github.com/emacs-dashboard/emacs-dashboard][dashboard]] package
+
+#+begin_src emacs-lisp
+  (setq dashboard-banner-logo-title "Huh!")
+  (setq dashboard-items '((recents  . 5)
+                          (bookmarks . 5)
+                          (projects . 5)
+                          (agenda . 5)
+                          (registers . 5)))
+  (use-package dashboard
+    :config (setq dashboard-startup-banner 3)
+    :init (dashboard-setup-startup-hook))
+#+end_src
+
+* Project Management
+** Helm
+
+#+begin_src emacs-lisp
+  (use-package helm)
+#+end_src
+
+** Install =rg= to search
+
+#+begin_src emacs-lisp
+  (use-package rg)
+  (use-package helm-rg
+    :config (setq helm-rg-default-directory 'git-root)
+    :bind (("H-F" . helm-projectile-rg)))
+#+end_src
+
+** Use =company= for completions
+
+#+begin_src emacs-lisp
+  (use-package company
+    :config (add-hook 'prog-mode-hook 'company-mode)
+    :bind (:map company-active-map
+                ("<tab>" . company-complete-selection))
+    :custom
+    (company-tooltip-align-annotations t)
+    (company-idle-delay 0)
+    (company-minimum-prefix-length 1))
+
+  (use-package company-box
+      :hook (company-mode . company-box-mode))
+#+end_src
+
+** =dumb-jump=
+
+#+begin_src emacs-lisp
+  (use-package dumb-jump
+    :config
+    (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
+
+  (global-set-key (kbd "M-.") 'xref-find-definitions)
+#+end_src
+
+If XREF returns more than one result show it in =ivy=
+
+#+begin_src emacs-lisp
+  (use-package ivy-xref
+    :init
+    (setq xref-show-definitions-function #'ivy-xref-show-defs))
+#+end_src
+
+** =flycheck=
+
+#+begin_src emacs-lisp
+  (use-package flycheck
+      :defer t
+      :hook (prog-mode . flycheck-mode))
+#+end_src
+
+** =magit=
+
+#+begin_src emacs-lisp
+  (use-package magit
+    :bind ("C-x g" . magit-status)
+    :custom
+    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+    :config (use-package with-editor)
+    (setq magit-push-always-verify nil
+          git-commit-summary-max-length 50))
+#+end_src
+
+** Neotree
+
+#+begin_src emacs-lisp
+  (use-package neotree
+    :ensure t
+    :bind (("C-c n t" . neotree-toggle)))
+#+end_src
+
+** Projectile
+
+#+begin_src emacs-lisp
+  (use-package projectile
+    :init
+    :delight '(:eval (concat " " (projectile-project-name)))
+    (setq projectile-completion-system 'ivy)
+    :config
+    (projectile-mode)
+    (setq projectile-completion-system 'ivy
+          projectile-switch-project-action 'projectile-dired
+          projectile-require-project-root nil)
+    :bind
+    (("H-p" . projectile-switch-project)
+     ("H-t" . projectile-find-file)))
+#+end_src
+
+* Development
+** Default configuration for development environment
+
+Remove trailing whitespace before saving
+
+#+begin_src emacs-lisp
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+end_src
+
+New line at the end of the file
+
+#+begin_src emacs-lisp
+  (setq require-final-newline t)
+#+end_src
+
+Automatically reload files when they change on disk
+
+#+begin_src emacs-lisp
+  (global-auto-revert-mode 1)
+  (setq auto-revert-verbose nil)
+#+end_src
+
+Delete selected text when overwriting
+
+#+begin_src emacs-lisp
+  (delete-selection-mode 1)
+#+end_src
+
+Indentation
+
+#+begin_src emacs-lisp
+  (setq-default tab-width 2)
+  (use-package indent-tools)
+#+end_src
+
+** Snippets
+
+Use yasnippets and doom
+
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :defer t
+    :init (yas-global-mode t))
+
+  (use-package doom-snippets
+    :load-path "~/dev/etc/doom-snippets"
+    :after yasnippet)
 #+end_src
 
 * =org-mode=
