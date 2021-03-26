@@ -208,6 +208,17 @@ When point goes outside the window, Emacs usually recenters the buffer point. Th
       (dired "~/")))
 #+end_src
 
+** Always kill current buffer
+
+#+begin_src emacs-lisp
+  (defun np/kill-current-buffer ()
+    "Kill the current buffer without prompting."
+    (interactive)
+    (kill-buffer (current-buffer)))
+
+  (global-set-key (kbd "C-x k") 'np/kill-current-buffer)
+#+end_src
+
 ** Functions
 
 #+begin_src emacs-lisp
