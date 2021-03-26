@@ -748,6 +748,8 @@ Include =org-tempo= for easy templating using =<s=.
 
 ** Display Preferences
 
+*** Bullets
+
 Use =org-bullets= to use pretty bullets instead of asterisks
 
 #+begin_src emacs-lisp
@@ -757,7 +759,7 @@ Use =org-bullets= to use pretty bullets instead of asterisks
       (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 #+end_src
 
-Misc display preferences
+*** Misc display preferences
 
 #+begin_src emacs-lisp
   (setq org-ellipsis " ▾"                     ;; better ellipsis
@@ -820,6 +822,8 @@ Use =visual-fill-column= to center =org-mode= beffers
 *
 ** Task Management
 
+*** Configure Agenda Files
+
 Store all org files under =~/dev/exocortex=. Archived tasks go in =archive.org=
 
 #+begin_src emacs-lisp
@@ -846,6 +850,8 @@ Agenda is spread across multiple files.
                                (org-file-path "work.org")))
 #+end_src
 
+*** Mark Tasks Done
+
 Mark TODO done and archive it
 
 #+begin_src emacs-lisp
@@ -871,6 +877,7 @@ Ensure that a task can’t be marked as done if it contains unfinished subtasks 
   (setq org-enforce-todo-checkbox-dependencies t)
 #+end_src
 
+*** Agenda Display
 Begin week today
 
 #+begin_src emacs-lisp
@@ -889,6 +896,36 @@ Don't show deadline entries under today's entry
   (setq org-deadline-warning-days 0)
 #+end_src
 
+*** Capture Templates
+
+#+begin_src emacs-lisp
+  (setq org-capture-templates
+        '(("t" "Todo"
+           entry
+           (file+headline org-index-file "Inbox")
+           "* TODO %?\n")
+          ("w" "Todo"
+           entry
+           (file+headline "~/dev/exocortex/work.org" "Tasks")
+           "* TODO %?\n")
+          ("u" "Standup Update"
+           entry
+           (file+datetree "~/dev/exocortex/work.org")
+           "* %?\n")))
+#+end_src
+
+** Key Bindings
+
+#+begin_src emacs-lisp
+  (define-key global-map "\C-cl" 'org-store-link)
+  (define-key global-map "\C-ca" 'org-agenda)
+  (define-key global-map "\C-cc" 'org-capture)
+#+end_src
+
+* Writing prose
+
+** TODO Flush this out
+
 * Evaluate Packages
 ** [[https://github.com/abo-abo/avy][avy]]
 ** ivy-rich
@@ -896,3 +933,6 @@ Don't show deadline entries under today's entry
 ** [[https://github.com/noctuid/general.el][general.el]]
 ** Is helm required?
 ** Doom and spacemacs ruby mode
+** deft
+** wgrep
+** refile TODO to agenda files
