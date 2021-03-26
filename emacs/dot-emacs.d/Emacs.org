@@ -504,6 +504,8 @@ If XREF returns more than one result show it in =ivy=
     :bind
     (("H-p" . projectile-switch-project)
      ("H-t" . projectile-find-file)))
+
+  (projectile-global-mode)
 #+end_src
 
 * Development
@@ -546,6 +548,19 @@ Treat terms in names as separate for easy navigation
 #+begin_src emacs-lisp
   (use-package subword
     :config (global-subword-mode 1))
+#+end_src
+
+Enable region case modification
+
+#+begin_src emacs-lisp
+  (put 'downcase-region 'disabled nil)
+  (put 'upcase-region 'disabled nil)
+#+end_src
+
+Always indent with spaces
+
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil)
 #+end_src
 
 ** LSP
@@ -633,8 +648,7 @@ Running tests from within Emacs is part of my flow.
     :config
     (add-hook 'compilation-filter-hook 'inf-ruby-auto-enter)
     (setq compilation-scroll-output nil
-          rspec-command-options "--color --order random"
-          rspec-use-chruby t))
+          rspec-command-options "--color --order random"))
 #+end_src
 
 Ruby method comments are often formatted with Yard.
@@ -682,6 +696,13 @@ Associate various files with =ruby-mode=
    "\\Brewfile$"
    "\\Vagrantfile$"
    "\\Vagrantfile.local$")
+#+end_src
+
+** Terraform
+
+#+begin_src emacs-lisp
+  (use-package terraform-mode)
+  (use-package company-terraform)
 #+end_src
 
 ** Yaml
