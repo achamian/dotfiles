@@ -819,9 +819,16 @@ Use =visual-fill-column= to center =org-mode= beffers
   (use-package visual-fill-column
     :hook (org-mode . np/org-mode-visual-fill))
 #+end_src
-*
-** Task Management
 
+** Task Management
+*** Todo States
+
+#+begin_src emacs-lisp
+  (setq org-todo-keywords
+        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                (sequence "PROJECT(p)" "|" "DONE(d)" "CANCELLED(c)")
+                (sequence "WAITING(w)" "DELEGATED(e)" "|" "CANCELLED(c)"))))
+#+end_src
 *** Configure Agenda Files
 
 Store all org files under =~/dev/exocortex=. Archived tasks go in =archive.org=
