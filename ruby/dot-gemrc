@@ -1,0 +1,4 @@
+# https://docs.ruby-lang.org/en/2.5.0/Gem/ConfigFile.html
+gem: --no-ri --no-rdoc
+install: --no-rdoc --no-ri
+update: --no-rdoc --no-ri

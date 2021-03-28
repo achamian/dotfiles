@@ -721,7 +721,7 @@ Associate various files with =ruby-mode=
 #+end_src
 
 * =org-mode=
-
+** Package Install
 Include =org-tempo= for easy templating using =<s=.
 
 #+begin_src emacs-lisp
@@ -747,6 +747,18 @@ Include =org-tempo= for easy templating using =<s=.
 #+end_src
 
 ** Display Preferences
+*** Fold on Startup
+
+Open all agenda files folded.
+#+begin_src emacs-lisp
+  (setq org-startup-folded t)
+#+end_src
+
+This setting impacts perforamnce of agenga while processing files for the first time. Agenda should ignore this setting
+
+#+begin_src emacs-lisp
+  (setq org-agenda-inhibit-startup t)
+#+end_src
 
 *** Bullets
 
@@ -913,11 +925,15 @@ Don't show deadline entries under today's entry
            "* TODO %?\n")
           ("w" "Todo"
            entry
-           (file+headline "~/dev/exocortex/work.org" "Tasks")
+           (file+olp+datetree "~/dev/exocortex/work.org" "Notes")
            "* TODO %?\n")
+          ("m" "Notes"
+           entry
+           (file+olp+datetree "~/dev/exocortex/work.org" "Notes")
+           "* %?\n")
           ("u" "Standup Update"
            entry
-           (file+datetree "~/dev/exocortex/work.org")
+           (file+olp+datetree "~/dev/exocortex/work.org" "Standup")
            "* %?\n")))
 #+end_src
 
@@ -935,8 +951,8 @@ Don't show deadline entries under today's entry
 
 * Evaluate Packages
 ** [[https://github.com/abo-abo/avy][avy]]
-** ivy-rich
 ** hi-lock
+** ivy-rich
 ** [[https://github.com/noctuid/general.el][general.el]]
 ** Is helm required?
 ** Doom and spacemacs ruby mode

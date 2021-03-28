@@ -1,0 +1,9 @@
+[user]
+	name = Niranjan Paranjape
+	email = niranjangp@gmail.com
+[pull]
+	rebase = false
+[init]
+	defaultBranch = main
+[core]
+	excludesfile = ~/.gitignore
