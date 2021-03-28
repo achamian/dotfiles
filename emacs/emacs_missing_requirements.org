@@ -1,0 +1,9 @@
+#+TITLE: Missing Functionality to be implemented in dotfiles
+
+* Gather all dotfiles in one directory
+* Emacs
+** Projectile should use ivy for finding files
+** Is Helm required?
+** Setup dashboard with Agenda View
+** Set Org TODO, Project labels
+** Enable spell check mode for org files

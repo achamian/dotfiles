@@ -757,7 +757,7 @@ Open all agenda files folded.
 This setting impacts perforamnce of agenga while processing files for the first time. Agenda should ignore this setting
 
 #+begin_src emacs-lisp
-  (setq org-agenda-inhibit-startup t)
+  ;; (setq org-agenda-inhibit-startup t)
 #+end_src
 
 *** Bullets
@@ -852,8 +852,10 @@ Store all org files under =~/dev/exocortex=. Archived tasks go in =archive.org=
     "FILENAME: Return the absolute address of an org file, given its relative name."
     (concat (file-name-as-directory org-directory) filename))
 
-  (setq org-inbox-file (org-file-path "inbox.org"))
+  ;; Personal TODOs and Notes go here
   (setq org-index-file (org-file-path "index.org"))
+  ;; Work TODOs and Notes go here
+  (setq org-work-file (org-file-path "work.org"))
 
   (setq org-archive-location
         (concat (org-file-path "archive.org") "::* From %s"))
@@ -863,10 +865,10 @@ Agenda is spread across multiple files.
 
 #+begin_src emacs-lisp
   (setq org-agenda-files (list org-index-file
+                               org-work-file
                                (org-file-path "events.org")
                                (org-file-path "habits.org")
-                               (org-file-path "recurring-events.org")
-                               (org-file-path "work.org")))
+                               (org-file-path "recurring-events.org")))
 #+end_src
 
 *** Mark Tasks Done
@@ -925,15 +927,15 @@ Don't show deadline entries under today's entry
            "* TODO %?\n")
           ("w" "Todo"
            entry
-           (file+olp+datetree "~/dev/exocortex/work.org" "Notes")
+           (file+olp+datetree org-work-file "Notes")
            "* TODO %?\n")
           ("m" "Notes"
            entry
-           (file+olp+datetree "~/dev/exocortex/work.org" "Notes")
+           (file+olp+datetree org-work-file "Notes")
            "* %?\n")
           ("u" "Standup Update"
            entry
-           (file+olp+datetree "~/dev/exocortex/work.org" "Standup")
+           (file+olp+datetree org-work-file "Standup")
            "* %?\n")))
 #+end_src
 
