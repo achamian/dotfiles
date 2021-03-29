@@ -956,14 +956,3 @@ Don't show deadline entries under today's entry
 * Writing prose
 
 ** TODO Flush this out
-
-* Evaluate Packages
-** [[https://github.com/abo-abo/avy][avy]]
-** hi-lock
-** ivy-rich
-** [[https://github.com/noctuid/general.el][general.el]]
-** Is helm required?
-** Doom and spacemacs ruby mode
-** deft
-** wgrep
-** refile TODO to agenda files

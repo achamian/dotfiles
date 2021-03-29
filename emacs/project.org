@@ -1,0 +1,17 @@
+#+TITLE: Setting up Emacs configuration
+
+* Emacs Setup
+** TODO Sort out Journeling with Emacs
+** TODO Autosave all org files
+** TODO Flush out requirements
+
+
+* Evaluate Packages
+** [[https://github.com/abo-abo/avy][avy]]
+** hi-lock
+** ivy-rich
+** [[https://github.com/noctuid/general.el][general.el]]
+** Doom and spacemacs ruby mode
+** deft
+** wgrep
+** org-room
