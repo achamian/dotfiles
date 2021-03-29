@@ -732,7 +732,6 @@ Include =org-tempo= for easy templating using =<s=.
 
   (use-package org
     :ensure org-plus-contrib
-    :bind (:map org-mode-map ("C-c e" . org-edit-src-code))
     :hook (org-mode . np/org-mode-setup)
     :config
     (require 'org-tempo)
@@ -917,6 +916,12 @@ Don't show deadline entries under today's entry
   (setq org-deadline-warning-days 0)
 #+end_src
 
+*** Org Habits
+
+#+begin_src emacs-lisp
+  (require 'org-habit)
+#+end_src
+
 *** Capture Templates
 
 #+begin_src emacs-lisp
@@ -945,6 +950,7 @@ Don't show deadline entries under today's entry
   (define-key global-map "\C-cl" 'org-store-link)
   (define-key global-map "\C-ca" 'org-agenda)
   (define-key global-map "\C-cc" 'org-capture)
+  (define-key global-map "\C-cg" 'org-capture-goto-last-stored)
 #+end_src
 
 * Writing prose
