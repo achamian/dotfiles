@@ -177,11 +177,7 @@ When point goes outside the window, Emacs usually recenters the buffer point. Th
 #+begin_src emacs-lisp
   (use-package counsel
     :bind
-    ("M-x" . 'counsel-M-x)
-    ("H-x" . 'counsel-M-x)
     ("C-s" . 'swiper)
-    ([f10] . ivy-switch-buffer)
-
     :config
     (use-package flx)
     (use-package smex)
@@ -193,6 +189,14 @@ When point goes outside the window, Emacs usually recenters the buffer point. Th
     (setq ivy-re-builders-alist
           '((swiper . ivy--regex-plus)
             (t . ivy--regex-fuzzy))))
+#+end_src
+
+** =M-x= alternative
+
+#+begin_src emacs-lisp
+  (use-package smex
+    :config
+    (global-set-key (kbd "H-x") 'smex))
 #+end_src
 
 ** Dired Mode
@@ -415,7 +419,11 @@ Use [[https://github.com/emacs-dashboard/emacs-dashboard][dashboard]] package
 ** Helm
 
 #+begin_src emacs-lisp
-  (use-package helm)
+  (use-package helm
+    :bind (("M-x" . helm-M-x)
+           ("M-<f5>" . helm-find-files)
+           ([f10] . helm-buffers-list)
+           ([S-f10] . helm-recentf)))
 #+end_src
 
 ** Install =rg= to search
@@ -494,16 +502,19 @@ If XREF returns more than one result show it in =ivy=
 #+begin_src emacs-lisp
   (use-package projectile
     :init
+    :diminish projectile-mode
     :delight '(:eval (concat " " (projectile-project-name)))
     (setq projectile-completion-system 'ivy)
     :config
     (projectile-mode)
     (setq projectile-completion-system 'ivy
           projectile-switch-project-action 'projectile-dired
-          projectile-require-project-root nil)
+          projectile-require-project-root nil))
+
+  (use-package helm-projectile
     :bind
-    (("H-p" . projectile-switch-project)
-     ("H-t" . projectile-find-file)))
+    (("H-p" . helm-projectile-switch-project)
+     ("H-t" . helm-projectile-find-file)))
 
   (projectile-global-mode)
 #+end_src
