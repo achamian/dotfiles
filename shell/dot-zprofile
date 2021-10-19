@@ -1,0 +1,3 @@
+export GOPATH=$HOME/Work/Go
+export PATH=$GOPATH/bin:$PATH
+eval "$(pyenv init --path)"

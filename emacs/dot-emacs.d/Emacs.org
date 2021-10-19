@@ -284,7 +284,7 @@ Use =ace-window= for window management
 *** Font Configuration
 
 #+begin_src emacs-lisp
-  (setq np/default-fixed-font "Fira Code Retina")
+  (setq np/default-fixed-font "Source Code Pro")
   (setq np/default-fixed-font-size 140)
   (setq np/current-fixed-font-size np/default-fixed-font-size)
   (set-face-attribute 'default nil
@@ -633,6 +633,28 @@ Use =eldoc-mode= to display documentation while working on Elisp
     (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
 #+end_src
 
+** Elixir
+
+Install =elixir-mode=
+
+#+begin_src emacs-lisp
+  (use-package elixir-mode
+    :init (add-hook 'elixir-mode-hook
+                    (lambda () (add-hook 'before-save-hook 'elixir-format nil t))))
+#+end_src
+
+Add =alchemist=
+
+#+begin_src emacs-lisp
+  (use-package alchemist
+    :init
+    (setq alchemist-mix-command "/usr/local/bin/mix")
+    (setq alchemist-iex-program-name "/usr/local/bin/iex"))
+#+end_src
+
+** Python
+
+
 ** Ruby
 
 I use =rbenv= to manage different ruby versions.
@@ -679,7 +701,7 @@ Things to do when =ruby-mode= is loaded
           (lambda ()
             (setq ruby-insert-encoding-magic-comment nil)
             (yas-minor-mode)
-            (eglot-ensure)
+            ;; (eglot-ensure)
             (local-set-key "\r" 'newline-and-indent)))
 #+end_src
 
@@ -926,11 +948,11 @@ Don't show deadline entries under today's entry
 
 #+begin_src emacs-lisp
   (setq org-capture-templates
-        '(("t" "Todo"
+        '(("p" "Personal Todo"
            entry
            (file+headline org-index-file "Inbox")
            "* TODO %?\n")
-          ("w" "Todo"
+          ("t" "Work Todo"
            entry
            (file+olp+datetree org-work-file "Notes")
            "* TODO %?\n")
