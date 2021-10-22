@@ -576,10 +576,22 @@ Always indent with spaces
 
 ** LSP
 
-Use =eglot= as LSP client
+Using [[https://emacs-lsp.github.io/lsp-mode/][lsp-mod]] to enable IDE like functionality
 
 #+begin_src emacs-lisp
-  (use-package eglot)
+  (use-package lsp-mode
+      :commands (lsp lsp-deferred)
+      :config (progn
+                (require 'lsp-clients)
+                (lsp-enable-which-key-integration t)))
+
+  (use-package lsp-ui
+    :commands lsp-ui-mode
+    :config (progn
+              ;; disable inline documentation
+              (setq lsp-ui-sideline-enable nil)
+              ;; disable showing docs on hover at the top of the window
+              (setq lsp-ui-doc-enable nil)))
 #+end_src
 
 ** Snippets
@@ -666,6 +678,17 @@ Add =alchemist=
 ** Python
 
 
+To use =python= with =lsp-mode= set up the environment by installing =python-language-server=. For more information refer to =lsp-mode= [[https://emacs-lsp.github.io/lsp-mode/page/languages/][language configuration documentation]].
+
+#+begin_src sh :tangle no
+  pip install --user "python-language-server[all]"
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package python-mode
+    :ensure t
+    :hook (python-mode . lsp-deferred))
+#+end_src
 ** Ruby
 
 I use =rbenv= to manage different ruby versions.
